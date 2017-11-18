@@ -15,7 +15,9 @@ float angle = 0.0;
 float lx = 0.0f, lz = 1.0f;
 float x = 0.0f, z = 5.0f;
 
-GLuint tex;
+//Textures
+GLuint tex_sky, tex_ground, tex_ball, tex_ball2, tex_ball3;
+
 char title[] = "3D Model Loader Sample";
 
 // 3D Projection Options
@@ -139,8 +141,6 @@ int cameraZoom = 0;
 //Model_3DS model_house;
 //Model_3DS model_tree;
 
-// Textures
-GLuint tex_ground;
 
 //=======================================================================
 // Lighting Configuration Function
@@ -284,6 +284,21 @@ void RenderGround()
     glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 }
 
+void orthogonalStart()
+{
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(-WIDTH/2, WIDTH/2, -HEIGHT/2, HEIGHT/2);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void orthogonalEnd()
+{
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+}
 
 void DrawCircleOnBall() {
     glPushMatrix();
@@ -291,6 +306,18 @@ void DrawCircleOnBall() {
     glColor3f(0,0,0);
     glutSolidSphere(0.5,60,60);
     glColor3f(1,1,1);
+    glPopMatrix();
+}
+
+
+void DrawHexagonOnBall() {
+    glPushMatrix();
+    glBegin(GL_POLYGON);
+    for(int i = 0; i < 6; ++i) {
+        glVertex2d(sin(i/6.0*2*M_PI),
+                   cos(i/6.0*2*M_PI));
+    }
+    glEnd();
     glPopMatrix();
 }
 
@@ -312,38 +339,56 @@ void myDisplay(void)
     // Draw Ground
     RenderGround();
 
-    glDisable(GL_TEXTURE_2D);
     glPushMatrix();
-    glColor3f(0.7,0.7,0.7);
-    glTranslatef(0,3,0);
-    glutSolidSphere(2,50,50);
-    glEnable(GL_TEXTURE_2D);
-    glColor3f(1,1,1);
+    GLUquadricObj * qobj;
+    qobj = gluNewQuadric();
+    glTranslated(4,2,0);
+    glRotated(120,0,1,0);
+    glBindTexture(GL_TEXTURE_2D, tex_ball2);
+    gluQuadricTexture(qobj,true);
+    gluQuadricNormals(qobj,GL_SMOOTH);
+    gluSphere(qobj,2,50,50);
+    gluDeleteQuadric(qobj);
     glPopMatrix();
 
 
+//    glDisable(GL_TEXTURE_2D);
+//    glPushMatrix();
+//    glColor3f(0.7,0.7,0.7);
+//    glTranslatef(0,3,0);
+//    glutSolidSphere(2,50,50);
+//    glColor3f(1,1,1);
+//    glPopMatrix();
+//    glEnable(GL_TEXTURE_2D);
 
-    glPushMatrix();
-    glRotatef(-60,0,1,0);
-    glTranslatef(1.55,3,-0.4);
-    glColor3f(0,0,0);
-    glutSolidSphere(0.5,20,20);
-    glColor3f(1,1,1);
-    glPopMatrix();
 
-    DrawCircleOnBall();
+//    DrawCircleOnBall();
+//
+//    orthogonalStart();
+//    glColor3f(1,0,0);
+//    DrawHexagonOnBall();
+//    glColor3f(1,1,1);
+//    orthogonalEnd();
 //
 //    for (int i = 0; i < 360; i+=50) {
+//        glPushMatrix();
+//        glRotatef(-i,0,1,0);
+//        DrawCircleOnBall();
+//        glPopMatrix();
 //
+//        glPushMatrix();
+//        glRotatef(-i,1,1,0);
+//        DrawCircleOnBall();
+//        glPopMatrix();
 //    }
-
-//    glPushMatrix();
+//
+////    glPushMatrix();
 //    glRotatef(-100,0,1,0);
 //    DrawCircleOnBall();
 //    glPopMatrix();
-//
+////
 //    glPushMatrix();
-//    glRotatef(-300,0,1,0);
+//    glRotatef(-200,0,1,0);
 //    DrawCircleOnBall();
 //    glPopMatrix();
 
@@ -368,12 +413,10 @@ void myDisplay(void)
 
 //sky box
     glPushMatrix();
-
-    GLUquadricObj * qobj;
     qobj = gluNewQuadric();
     glTranslated(50,0,0);
     glRotated(90,1,0,1);
-    glBindTexture(GL_TEXTURE_2D, tex);
+    glBindTexture(GL_TEXTURE_2D, tex_sky);
     gluQuadricTexture(qobj,true);
     gluQuadricNormals(qobj,GL_SMOOTH);
     gluSphere(qobj,100,100,100);
@@ -542,13 +585,42 @@ void LoadAssets()
                     SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
             );
 
-    tex = SOIL_load_OGL_texture // load an image file directly as a new OpenGL texture
+    tex_sky = SOIL_load_OGL_texture // load an image file directly as a new OpenGL texture
             (
                     "/home/moar/CLionProjects/3dbigproject/Textures/sky4-jpg.png",
                     SOIL_LOAD_AUTO,
                     SOIL_CREATE_NEW_ID,
                     SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
             );
+
+    tex_ball = SOIL_load_OGL_texture // load an image file directly as a new OpenGL texture
+            (
+                    "/home/moar/CLionProjects/3dbigproject/Textures/ball.png",
+                    SOIL_LOAD_AUTO,
+                    SOIL_CREATE_NEW_ID,
+                    SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+            );
+
+
+    tex_ball2 = SOIL_load_OGL_texture // load an image file directly as a new OpenGL texture
+            (
+                    "/home/moar/CLionProjects/3dbigproject/Textures/ball2.png",
+                    SOIL_LOAD_AUTO,
+                    SOIL_CREATE_NEW_ID,
+                    SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+            );
+
+
+    tex_ball3 = SOIL_load_OGL_texture // load an image file directly as a new OpenGL texture
+            (
+                    "/home/moar/CLionProjects/3dbigproject/Textures/ball3.png",
+                    SOIL_LOAD_AUTO,
+                    SOIL_CREATE_NEW_ID,
+                    SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+            );
+
+
+    printf(SOIL_last_result());
 }
 
 //=======================================================================
