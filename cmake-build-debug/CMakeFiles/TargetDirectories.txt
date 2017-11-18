@@ -1,0 +1,3 @@
+/home/moar/CLionProjects/3dbigproject/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/moar/CLionProjects/3dbigproject/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/moar/CLionProjects/3dbigproject/cmake-build-debug/CMakeFiles/3dbigproject.dir
