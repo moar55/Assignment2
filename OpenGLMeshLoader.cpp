@@ -497,14 +497,14 @@ void myDisplay(void)
 
 //    WIP
 
-//    glPushMatrix();
-//    glColor3f(0,0,0);
-//    glScalef(0.2,1,2);
-//    glTranslatef(1.5,-1.4,0);
-//    glutSolidCube(0.8);
-//    glColor3f(1,1,1);
-//    glPopMatrix();
-//    glPopMatrix();
+    glPushMatrix();
+    glColor3f(0,0,0);
+    glScalef(0.05,1,2);
+    glTranslatef(15,-0.8,-0.05  );
+    glutSolidCube(0.8);
+    glColor3f(1,1,1);
+    glPopMatrix();
+    glPopMatrix();
 
 // TODO: Delete qobj
 
