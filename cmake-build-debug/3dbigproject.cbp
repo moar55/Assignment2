@@ -87,18 +87,6 @@
 		<Unit filename="/home/moar/CLionProjects/3dbigproject/OpenGLMeshLoader.cpp">
 			<Option target="3dbigproject"/>
 		</Unit>
-		<Unit filename="/home/moar/CLionProjects/3dbigproject/soil-master/src/SOIL.c">
-			<Option target="3dbigproject"/>
-		</Unit>
-		<Unit filename="/home/moar/CLionProjects/3dbigproject/soil-master/src/image_DXT.c">
-			<Option target="3dbigproject"/>
-		</Unit>
-		<Unit filename="/home/moar/CLionProjects/3dbigproject/soil-master/src/image_helper.c">
-			<Option target="3dbigproject"/>
-		</Unit>
-		<Unit filename="/home/moar/CLionProjects/3dbigproject/soil-master/src/stb_image_aug.c">
-			<Option target="3dbigproject"/>
-		</Unit>
 		<Unit filename="/home/moar/CLionProjects/3dbigproject/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

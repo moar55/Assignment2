@@ -66,7 +66,7 @@ CMAKE_BINARY_DIR = /home/moar/CLionProjects/3dbigproject/cmake-build-debug
 CMakeFiles/3dbigproject.dir/all:
 	$(MAKE) -f CMakeFiles/3dbigproject.dir/build.make CMakeFiles/3dbigproject.dir/depend
 	$(MAKE) -f CMakeFiles/3dbigproject.dir/build.make CMakeFiles/3dbigproject.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/moar/CLionProjects/3dbigproject/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target 3dbigproject"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/moar/CLionProjects/3dbigproject/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target 3dbigproject"
 .PHONY : CMakeFiles/3dbigproject.dir/all
 
 # Include target in all.
@@ -76,7 +76,7 @@ all: CMakeFiles/3dbigproject.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/3dbigproject.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/moar/CLionProjects/3dbigproject/cmake-build-debug/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/moar/CLionProjects/3dbigproject/cmake-build-debug/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/3dbigproject.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/moar/CLionProjects/3dbigproject/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/3dbigproject.dir/rule

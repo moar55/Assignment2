@@ -1,12 +1,19 @@
 //#include "lib3ds"
 //#include "GLTexture.h"
-#include "soil-master/src/SOIL/SOIL.h"
+#include "SOIL/SOIL.h"
 #include <GL/glut.h>
 #include <cstdio>
+#include <iostream>
 #include "cmath"
+
+
+// =========================  NOTE ====================================//
+//          Right handed coordinate system used here                   //
+// =========================         ==================================//
 
 #define DEG2RAD(a) (a * 0.0174532925)
 #define GLUT_KEY_ESCAPE 27
+#define RGB2FLT(a) ((double)a / (double)255)
 
 int WIDTH = 1280;
 int HEIGHT = 720;
@@ -15,8 +22,19 @@ float angle = 0.0;
 float lx = 0.0f, lz = 1.0f;
 float x = 0.0f, z = 5.0f;
 
+int globalTime = 0;
+
 //Textures
-GLuint tex_sky, tex_ground, tex_ball, tex_ball2, tex_ball3;
+GLuint tex_sky, tex_ground, tex_ball, tex_ball2, tex_ball3, water, underwater;
+
+
+struct BallAnimation{
+    float offset = 0;
+    bool up = true;
+    int delay = 100;
+};
+
+BallAnimation ballAnimation;
 
 char title[] = "3D Model Loader Sample";
 
@@ -234,6 +252,7 @@ void Setup(void)
 
     glEnable(GL_NORMALIZE);
 }
+
 void setupLights() {
     GLfloat ambient[] = { 0.7f, 0.7f, 0.7, 1.0f };
     GLfloat diffuse[] = { 0.6f, 0.6f, 0.6, 1.0f };
@@ -260,22 +279,21 @@ void RenderGround()
     glColor3f(0.6, 0.6, 0.6);	// Dim the ground texture a bit
 
     glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-
 
     glBindTexture(GL_TEXTURE_2D, tex_ground);	// Bind the ground texture
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 
     glPushMatrix();
     glBegin(GL_QUADS);
     glNormal3f(0, 1, 0);	// Set quad normal direction.
     glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
     glVertex3f(-20, 0, -20);
-    glTexCoord2f(5, 0);
+    glTexCoord2f(1, 0);
     glVertex3f(20, 0, -20);
-    glTexCoord2f(5, 5);
-    glVertex3f(20, 0, 20);
+    glTexCoord2f(1, 5);
+    glVertex3f(20, 0, 50);
     glTexCoord2f(0, 5);
-    glVertex3f(-20, 0, 20);
+    glVertex3f(-20, 0, 50);
     glEnd();
     glPopMatrix();
 
@@ -321,6 +339,41 @@ void DrawHexagonOnBall() {
     glPopMatrix();
 }
 
+void DrawSphere(float radius, int ss) {
+    GLUquadricObj * qobj;
+    qobj = gluNewQuadric();
+    gluSphere(qobj,radius,ss,ss);
+    gluDeleteQuadric(qobj);
+}
+
+void DrawLeaf() {
+    glPushMatrix();
+    glColor3f(RGB2FLT(58), RGB2FLT(95), RGB2FLT(11));
+    glTranslatef(0,16,20);
+    glScalef(1,1.5,2);
+    DrawSphere(1.2,50);
+    glPopMatrix();
+    glColor3f(1,1,1);
+}
+
+
+void DrawEye() {
+    glPushMatrix();
+    glTranslatef(0.8,7.5,10);
+    glRotatef(-90,0,0.5,0);
+    GLUquadricObj * qobj;
+    qobj = gluNewQuadric();
+    gluDisk(qobj,0.2,0.4,50,50);
+//    pupil //
+    glPushMatrix();
+    glColor3f(0,0,0);
+    gluDisk(qobj,0,0.2, 50,50);
+    glPopMatrix();
+    glColor3f(1,1,1);
+    glPopMatrix();
+    gluDeleteQuadric(qobj);
+}
+
 //=======================================================================
 // Display Function
 //=======================================================================
@@ -339,18 +392,121 @@ void myDisplay(void)
     // Draw Ground
     RenderGround();
 
+//    Ball
+
     glPushMatrix();
     GLUquadricObj * qobj;
     qobj = gluNewQuadric();
-    glTranslated(4,2,0);
+    glTranslated(4,2 + ballAnimation.offset,0);
     glRotated(120,0,1,0);
     glBindTexture(GL_TEXTURE_2D, tex_ball2);
     gluQuadricTexture(qobj,true);
     gluQuadricNormals(qobj,GL_SMOOTH);
-    gluSphere(qobj,2,50,50);
+    gluSphere(qobj,1.6,50,50);
     gluDeleteQuadric(qobj);
     glPopMatrix();
 
+
+//===================   Tree Start  ============================//
+    glDisable(GL_TEXTURE_2D);
+    //  STEM //
+    glPushMatrix();
+    qobj = gluNewQuadric();
+    glColor3f(RGB2FLT(139), RGB2FLT(69), RGB2FLT(19));
+    glTranslated(0,15,20);
+    glRotated(90,1,0,0);
+    gluCylinder(qobj,3,2.5,15,100,100);
+    glPopMatrix();
+    glColor3f(1,1,1);
+
+    //Leaves//
+    glPushMatrix();
+    glTranslatef(0,0,2);
+    DrawLeaf();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0,0,-2);
+    DrawLeaf();
+    glPopMatrix();
+
+    glPushMatrix();
+
+    glTranslatef(2,16,20);
+    glRotatef(90,0,1,0);
+    glTranslatef(0,-16,-20);
+    DrawLeaf();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-2,16,20);
+    glRotatef(90,0,1,0);
+    glTranslatef(0,-16,-20);
+    DrawLeaf();
+    glPopMatrix();
+    //Leaves End//
+
+//==================== TREE ENDS ===============================//
+
+
+//==================== SPONGEBOB ================================//
+
+    // UPPER TORSO //
+    glPushMatrix();
+    glTranslatef(0,7,9);
+    glColor3f(RGB2FLT(255), RGB2FLT(247), RGB2FLT(0));
+    glScalef(0.5,1,1);
+    glutSolidCube(3);
+    glPopMatrix();
+    glColor3f(1,1,1);
+
+
+
+
+//    Eyes //
+
+//    Left Eye
+    DrawEye();
+
+//   Right eye
+    glPushMatrix();
+    glTranslatef(0,0,-1.6);
+    DrawEye();
+    glPopMatrix();
+
+//    Aligning coordinates of following objects relative to upper torso
+    glPushMatrix();
+    glTranslatef(0,7,9);
+
+//    Nose
+    glPushMatrix();
+
+    glColor3f(RGB2FLT(237), RGB2FLT(229), RGB2FLT(0));
+    qobj = gluNewQuadric();
+    glTranslatef(-7.6,0,-9);
+    glTranslatef(0,7,9);
+    glRotatef(-90,0,1,0);
+    glTranslatef(0,-7,-9);
+    gluCylinder(qobj,0.17,0.17,0.8,50,50);
+    gluDisk(qobj,0,0.17,50,50);
+    glPopMatrix();
+    glColor3f(1,1,1);
+
+
+//    Mouth
+
+//    WIP
+
+//    glPushMatrix();
+//    glColor3f(0,0,0);
+//    glScalef(0.2,1,2);
+//    glTranslatef(1.5,-1.4,0);
+//    glutSolidCube(0.8);
+//    glColor3f(1,1,1);
+//    glPopMatrix();
+//    glPopMatrix();
+
+// TODO: Delete qobj
 
 //    glDisable(GL_TEXTURE_2D);
 //    glPushMatrix();
@@ -412,11 +568,12 @@ void myDisplay(void)
 
 
 //sky box
+    glEnable(GL_TEXTURE_2D);
     glPushMatrix();
     qobj = gluNewQuadric();
     glTranslated(50,0,0);
     glRotated(90,1,0,1);
-    glBindTexture(GL_TEXTURE_2D, tex_sky);
+    glBindTexture(GL_TEXTURE_2D, underwater);
     gluQuadricTexture(qobj,true);
     gluQuadricNormals(qobj,GL_SMOOTH);
     gluSphere(qobj,100,100,100);
@@ -424,7 +581,6 @@ void myDisplay(void)
 
 
     glPopMatrix();
-
 
 
     glutSwapBuffers();
@@ -567,6 +723,34 @@ void myReshape(int w, int h)
     gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
 }
 
+
+void animateBall() {
+    if(ballAnimation.delay >= 500)
+        ballAnimation.delay = 0;
+
+    if(ballAnimation.delay <= 300) {
+        if(ballAnimation.offset >= 6) {
+            ballAnimation.up = false;
+            ballAnimation.offset -= 0.4;
+        } else if(ballAnimation.offset <= 0){
+            ballAnimation.up = true;
+            ballAnimation.offset += 0.4;
+        } else {
+            ballAnimation.offset = (ballAnimation.up)? ballAnimation.offset += 0.4 : ballAnimation.offset -= 0.4;
+        }
+    } else if(ballAnimation.offset > 0) {
+        ballAnimation.offset-= 0.4;
+    }
+    ballAnimation.delay ++;
+}
+
+void timef(int val) {
+
+    animateBall();
+    glutPostRedisplay();                        // redraw
+    glutTimerFunc(10, timef, 0);                    //recall the time function after 1000
+}
+
 //=======================================================================
 // Assets Loading Function
 //=======================================================================
@@ -619,6 +803,23 @@ void LoadAssets()
                     SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
             );
 
+    water = SOIL_load_OGL_texture // load an image file directly as a new OpenGL texture
+            (
+                    "/home/moar/CLionProjects/3dbigproject/Textures/water.png",
+                    SOIL_LOAD_AUTO,
+                    SOIL_CREATE_NEW_ID,
+                    SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+            );
+
+    underwater = SOIL_load_OGL_texture // load an image file directly as a new OpenGL texture
+            (
+                    "/home/moar/CLionProjects/3dbigproject/Textures/underwater.png",
+                    SOIL_LOAD_AUTO,
+                    SOIL_CREATE_NEW_ID,
+                    SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+            );
+
+
 
     printf(SOIL_last_result());
 }
@@ -647,6 +848,8 @@ int main(int argc, char** argv)
     glutMotionFunc(myMotion);
 
     glutMouseFunc(myMouse);
+
+    glutTimerFunc(0,timef,0);
 
     glutReshapeFunc(myReshape);
 

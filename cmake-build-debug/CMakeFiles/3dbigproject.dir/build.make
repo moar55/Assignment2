@@ -81,126 +81,23 @@ CMakeFiles/3dbigproject.dir/OpenGLMeshLoader.cpp.o.provides: CMakeFiles/3dbigpro
 CMakeFiles/3dbigproject.dir/OpenGLMeshLoader.cpp.o.provides.build: CMakeFiles/3dbigproject.dir/OpenGLMeshLoader.cpp.o
 
 
-CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.o: CMakeFiles/3dbigproject.dir/flags.make
-CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.o: ../soil-master/src/SOIL.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/moar/CLionProjects/3dbigproject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.o   -c /home/moar/CLionProjects/3dbigproject/soil-master/src/SOIL.c
-
-CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/moar/CLionProjects/3dbigproject/soil-master/src/SOIL.c > CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.i
-
-CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/moar/CLionProjects/3dbigproject/soil-master/src/SOIL.c -o CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.s
-
-CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.o.requires:
-
-.PHONY : CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.o.requires
-
-CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.o.provides: CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.o.requires
-	$(MAKE) -f CMakeFiles/3dbigproject.dir/build.make CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.o.provides.build
-.PHONY : CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.o.provides
-
-CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.o.provides.build: CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.o
-
-
-CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.o: CMakeFiles/3dbigproject.dir/flags.make
-CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.o: ../soil-master/src/image_DXT.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/moar/CLionProjects/3dbigproject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.o   -c /home/moar/CLionProjects/3dbigproject/soil-master/src/image_DXT.c
-
-CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/moar/CLionProjects/3dbigproject/soil-master/src/image_DXT.c > CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.i
-
-CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/moar/CLionProjects/3dbigproject/soil-master/src/image_DXT.c -o CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.s
-
-CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.o.requires:
-
-.PHONY : CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.o.requires
-
-CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.o.provides: CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.o.requires
-	$(MAKE) -f CMakeFiles/3dbigproject.dir/build.make CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.o.provides.build
-.PHONY : CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.o.provides
-
-CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.o.provides.build: CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.o
-
-
-CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.o: CMakeFiles/3dbigproject.dir/flags.make
-CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.o: ../soil-master/src/image_helper.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/moar/CLionProjects/3dbigproject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.o   -c /home/moar/CLionProjects/3dbigproject/soil-master/src/image_helper.c
-
-CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/moar/CLionProjects/3dbigproject/soil-master/src/image_helper.c > CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.i
-
-CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/moar/CLionProjects/3dbigproject/soil-master/src/image_helper.c -o CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.s
-
-CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.o.requires:
-
-.PHONY : CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.o.requires
-
-CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.o.provides: CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.o.requires
-	$(MAKE) -f CMakeFiles/3dbigproject.dir/build.make CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.o.provides.build
-.PHONY : CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.o.provides
-
-CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.o.provides.build: CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.o
-
-
-CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.o: CMakeFiles/3dbigproject.dir/flags.make
-CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.o: ../soil-master/src/stb_image_aug.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/moar/CLionProjects/3dbigproject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.o   -c /home/moar/CLionProjects/3dbigproject/soil-master/src/stb_image_aug.c
-
-CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/moar/CLionProjects/3dbigproject/soil-master/src/stb_image_aug.c > CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.i
-
-CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/moar/CLionProjects/3dbigproject/soil-master/src/stb_image_aug.c -o CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.s
-
-CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.o.requires:
-
-.PHONY : CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.o.requires
-
-CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.o.provides: CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.o.requires
-	$(MAKE) -f CMakeFiles/3dbigproject.dir/build.make CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.o.provides.build
-.PHONY : CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.o.provides
-
-CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.o.provides.build: CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.o
-
-
 # Object files for target 3dbigproject
 3dbigproject_OBJECTS = \
-"CMakeFiles/3dbigproject.dir/OpenGLMeshLoader.cpp.o" \
-"CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.o" \
-"CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.o" \
-"CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.o" \
-"CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.o"
+"CMakeFiles/3dbigproject.dir/OpenGLMeshLoader.cpp.o"
 
 # External object files for target 3dbigproject
 3dbigproject_EXTERNAL_OBJECTS =
 
 3dbigproject: CMakeFiles/3dbigproject.dir/OpenGLMeshLoader.cpp.o
-3dbigproject: CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.o
-3dbigproject: CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.o
-3dbigproject: CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.o
-3dbigproject: CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.o
 3dbigproject: CMakeFiles/3dbigproject.dir/build.make
 3dbigproject: /usr/lib/x86_64-linux-gnu/libGLU.so
 3dbigproject: /usr/lib/x86_64-linux-gnu/libGL.so
 3dbigproject: /usr/lib/x86_64-linux-gnu/libglut.so
 3dbigproject: /usr/lib/x86_64-linux-gnu/libXmu.so
 3dbigproject: /usr/lib/x86_64-linux-gnu/libXi.so
+3dbigproject: /usr/lib/libSOIL.so
 3dbigproject: CMakeFiles/3dbigproject.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/moar/CLionProjects/3dbigproject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable 3dbigproject"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/moar/CLionProjects/3dbigproject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable 3dbigproject"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/3dbigproject.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -209,10 +106,6 @@ CMakeFiles/3dbigproject.dir/build: 3dbigproject
 .PHONY : CMakeFiles/3dbigproject.dir/build
 
 CMakeFiles/3dbigproject.dir/requires: CMakeFiles/3dbigproject.dir/OpenGLMeshLoader.cpp.o.requires
-CMakeFiles/3dbigproject.dir/requires: CMakeFiles/3dbigproject.dir/soil-master/src/SOIL.c.o.requires
-CMakeFiles/3dbigproject.dir/requires: CMakeFiles/3dbigproject.dir/soil-master/src/image_DXT.c.o.requires
-CMakeFiles/3dbigproject.dir/requires: CMakeFiles/3dbigproject.dir/soil-master/src/image_helper.c.o.requires
-CMakeFiles/3dbigproject.dir/requires: CMakeFiles/3dbigproject.dir/soil-master/src/stb_image_aug.c.o.requires
 
 .PHONY : CMakeFiles/3dbigproject.dir/requires
 

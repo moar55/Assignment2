@@ -208,6 +208,30 @@ ProcessorCount_cmd_getconf:FILEPATH=/usr/bin/getconf
 //Path to a program.
 ProcessorCount_cmd_sysctl:FILEPATH=/sbin/sysctl
 
+//Value Computed by CMake
+SOIL_BINARY_DIR:STATIC=/home/moar/CLionProjects/3dbigproject/cmake-build-debug
+
+//Build tests
+SOIL_BUILD_TESTS:BOOL=false
+
+//Path to a file.
+SOIL_INCLUDE_DIR:PATH=/usr/include/SOIL
+
+//Path to a library.
+SOIL_LIBRARY:FILEPATH=/usr/lib/libSOIL.so
+
+//Dependencies for the target
+SOIL_LIB_DEPENDS:STATIC=general;/usr/lib/x86_64-linux-gnu/libGLU.so;general;/usr/lib/x86_64-linux-gnu/libGL.so;general;/usr/lib/x86_64-linux-gnu/libGLU.so;general;/usr/lib/x86_64-linux-gnu/libGL.so;
+
+//Value Computed by CMake
+SOIL_SOURCE_DIR:STATIC=/home/moar/CLionProjects/3dbigproject
+
+//Value Computed by CMake
+untitled7_BINARY_DIR:STATIC=/home/moar/CLionProjects/3dbigproject/cmake-build-debug
+
+//Value Computed by CMake
+untitled7_SOURCE_DIR:STATIC=/home/moar/CLionProjects/3dbigproject
+
 
 ########################
 # INTERNAL cache entries
@@ -352,6 +376,8 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 FIND_PACKAGE_MESSAGE_DETAILS_GLUT:INTERNAL=[/usr/lib/x86_64-linux-gnu/libglut.so][/usr/include][v()]
 //Details about finding OpenGL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[/usr/lib/x86_64-linux-gnu/libGL.so][/usr/include][v()]
+//Details about finding SOIL
+FIND_PACKAGE_MESSAGE_DETAILS_SOIL:INTERNAL=[/usr/lib/libSOIL.so][/usr/include/SOIL][v()]
 //ADVANCED property for variable: GLUT_INCLUDE_DIR
 GLUT_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: GLUT_Xi_LIBRARY
@@ -372,4 +398,8 @@ OPENGL_xmesa_INCLUDE_DIR-ADVANCED:INTERNAL=1
 ProcessorCount_cmd_getconf-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: ProcessorCount_cmd_sysctl
 ProcessorCount_cmd_sysctl-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: SOIL_INCLUDE_DIR
+SOIL_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: SOIL_LIBRARY
+SOIL_LIBRARY-ADVANCED:INTERNAL=1
 
