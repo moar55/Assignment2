@@ -415,7 +415,7 @@ void myDisplay(void)
     glColor3f(RGB2FLT(139), RGB2FLT(69), RGB2FLT(19));
     glTranslated(0,15,20);
     glRotated(90,1,0,0);
-    gluCylinder(qobj,3,2.5,15,100,100);
+    gluCylinder(qobj,2,1.5,15,100,100);
     glPopMatrix();
     glColor3f(1,1,1);
 
@@ -451,7 +451,7 @@ void myDisplay(void)
 
 //==================== SPONGEBOB ================================//
 
-    // UPPER TORSO //
+    // FACE //
     glPushMatrix();
     glTranslatef(0,7,9);
     glColor3f(RGB2FLT(255), RGB2FLT(247), RGB2FLT(0));
@@ -459,8 +459,6 @@ void myDisplay(void)
     glutSolidCube(3);
     glPopMatrix();
     glColor3f(1,1,1);
-
-
 
 
 //    Eyes //
@@ -474,11 +472,11 @@ void myDisplay(void)
     DrawEye();
     glPopMatrix();
 
-//    Aligning coordinates of following objects relative to upper torso
+//    Aligning coordinates of following objects relative to upper torso //
     glPushMatrix();
     glTranslatef(0,7,9);
 
-//    Nose
+//      Nose      //
     glPushMatrix();
 
     glColor3f(RGB2FLT(237), RGB2FLT(229), RGB2FLT(0));
@@ -493,9 +491,7 @@ void myDisplay(void)
     glColor3f(1,1,1);
 
 
-//    Mouth
-
-//    WIP
+//      Mouth      //
 
     glPushMatrix();
     glColor3f(0,0,0);
@@ -504,7 +500,167 @@ void myDisplay(void)
     glutSolidCube(0.8);
     glColor3f(1,1,1);
     glPopMatrix();
+
+//    SQUARE PANTS!!   //
+
+//    pants
+    glPushMatrix();
+    glColor3f(RGB2FLT(32), RGB2FLT(5), RGB2FLT(0));
+//    alternative color     glColor3f(RGB2FLT(56), RGB2FLT(48), RGB2FLT(35));
+    glTranslatef(0,-2.25,0);
+    glScalef(0.5,0.5,1);
+    glutSolidCube(3);
     glPopMatrix();
+    glColor3f(1,1,1);
+
+//  el geeb el eswed el ymeen
+    glPushMatrix();
+    glColor3f(0,0,0);
+    glScalef(0.05,1,1.3);
+    glTranslatef(15,-2.5,-0.7 );
+    glutSolidCube(0.8);
+    glColor3f(1,1,1);
+    glPopMatrix();
+
+//  el geeb el eswed el shmal
+    glPushMatrix();
+    glColor3f(0,0,0);
+    glScalef(0.05,1,1.3);
+    glTranslatef(15,-2.5,0.68 );
+    glutSolidCube(0.8);
+    glColor3f(1,1,1);
+    glPopMatrix();
+
+
+//  el karafata el 7amra
+
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.8,4.5,9);
+    glBegin(GL_TRIANGLES);
+    glColor3f(RGB2FLT(111), RGB2FLT(0), RGB2FLT(0));
+    glVertex3f(0.0f, -0.4f, 0);
+    glVertex3f(0, 0.4, 0.4f);
+    glVertex3f(0, 0.4, -0.4f);
+    glEnd();
+    glPopMatrix();
+
+//    END OF SQUAREPANT //
+
+//  Aligning coordinates of following objects relative to upper torso //
+    glPushMatrix();
+    glTranslatef(0,7,9);
+
+//    dem legs ;) //
+
+//    left legs
+    glColor3f(RGB2FLT(32), RGB2FLT(5), RGB2FLT(0));
+    glPushMatrix();
+    glTranslatef(0.1,-3.2,1);
+    glScalef(1,1.3,1);
+    glutSolidCube(0.6);
+    glPopMatrix();
+
+    glColor3f(RGB2FLT(255), RGB2FLT(247), RGB2FLT(0));
+    glPushMatrix();
+    glTranslatef(0.1,-4.5, 1);
+    glScalef(0.5,3,0.5);
+    glutSolidCube(0.6);
+    glPopMatrix();
+
+    glColor3f(RGB2FLT(244), RGB2FLT(244), RGB2FLT(245));
+    glPushMatrix();
+    glTranslatef(0.1,-5.8, 1);
+    glScalef(0.5,1.6,0.5);
+    glutSolidCube(0.6);
+    glPopMatrix();
+
+
+//    right legs
+ glColor3f(RGB2FLT(32), RGB2FLT(5), RGB2FLT(0));
+    glPushMatrix();
+    glTranslatef(0.1,-3.2,-1.1);
+    glScalef(1,1.3,1);
+    glutSolidCube(0.6);
+    glPopMatrix();
+
+    glColor3f(RGB2FLT(255), RGB2FLT(247), RGB2FLT(0));
+    glPushMatrix();
+    glTranslatef(0.1,-4.5,-1.1);
+    glScalef(0.5,3,0.5);
+    glutSolidCube(0.6);
+    glPopMatrix();
+
+    glColor3f(RGB2FLT(244), RGB2FLT(244), RGB2FLT(245));
+    glPushMatrix();
+    glTranslatef(0.1,-5.8, -1.1);
+    glScalef(0.5,1.6,0.5);
+    glutSolidCube(0.6);
+    glPopMatrix();
+
+
+//    shoes  //
+
+    glColor3f(0,0,0);
+    glPushMatrix();
+    glTranslatef(0.2,-6.5,-1.12);
+    glScalef(2,1,1);
+    glutSolidCube(0.6);
+    glPopMatrix();
+
+    glColor3f(0,0,0);
+    glPushMatrix();
+    glTranslatef(0.2,-6.5,1);
+    glScalef(2,1,1);
+    glutSolidCube(0.6);
+    glPopMatrix();
+
+//    shoulders //
+
+    glPushMatrix();
+    glTranslatef(0,-0.8,1.78);
+    glScalef(1,1,1.1);
+    glColor3f(RGB2FLT(253), RGB2FLT(253), RGB2FLT(253));
+    glutSolidCube(0.5);
+    glPopMatrix();
+    glColor3f(1,1,1);
+
+    glPushMatrix();
+//    glScalef(1,1,1.1);
+    glTranslatef(0,-0.8,-1.78);
+    glColor3f(RGB2FLT(253), RGB2FLT(253), RGB2FLT(253));
+    glutSolidCube(0.5);
+    glPopMatrix();
+    glColor3f(1,1,1);
+
+
+//    arms      //
+
+    glPushMatrix();
+    glColor3f(RGB2FLT(255), RGB2FLT(247), RGB2FLT(0));
+    glTranslatef(0,-2,1.79);
+    glScalef(0.5,3.5,0.5);
+    glutSolidCube(0.6);
+    glPopMatrix();
+    glColor3f(1,1,1);
+
+    glPushMatrix();
+    glColor3f(RGB2FLT(255), RGB2FLT(247), RGB2FLT(0));
+    glTranslatef(0,-2,-1.79);
+    glScalef(0.5,3.5,0.5);
+    glutSolidCube(0.6);
+    glPopMatrix();
+    glColor3f(1,1,1);
+
+
+
+
+
+
+
+    glPopMatrix();
+    glColor3f(1,1,1);
 
 // TODO: Delete qobj
 
