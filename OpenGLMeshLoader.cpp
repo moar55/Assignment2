@@ -30,13 +30,16 @@ GLuint tex_sky, tex_ground, tex_ball, tex_ball2, tex_ball3, water, underwater;
 float poleRotate = 0;
 bool polClockwise = true;
 
+bool ballAnimate,sbAnimate, houseAnimate, poleAnimate, patrickAnimate, treeAnimate;
+
+bool playAll = false;
+
 
 struct BallAnimation{
     float offset = 0;
     bool up = true;
-    int delay = 100;
 };
-
+BallAnimation ballInitial;
 BallAnimation ballAnimation;
 
 struct SpongeBobAnimation{
@@ -49,6 +52,7 @@ struct SpongeBobAnimation{
     int delay= 0;
 };
 
+SpongeBobAnimation sbInitial;
 SpongeBobAnimation sb;
 
 
@@ -62,14 +66,29 @@ struct PatrickAnimation{
     float scale = 1;
     float scaleUp = true;
 };
+
+PatrickAnimation patrickInitial;
 PatrickAnimation patrickAnim;
 
 struct HouseAnimation{
     float grassOffset = 0;
-    float grassRev = false;
-    float wheelRotate = 0;
+    bool grassRev = false;
+    float scale = 1;
+    bool scaleUp = true;
 };
+HouseAnimation houseInitial;
 HouseAnimation houseAnim;
+
+
+struct TreeAnimation{
+    float shear = 0;
+    bool shearFnt = true;
+    float rotAngle =0;
+    bool clockwise = true;
+};
+TreeAnimation treeInitial;
+TreeAnimation treeAnim;
+
 
 
 
@@ -435,7 +454,7 @@ void myDisplay(void)
     glPushMatrix();
     GLUquadricObj * qobj;
     qobj = gluNewQuadric();
-    glTranslated(4,2 + ballAnimation.offset,0);
+    glTranslated(4,2 + ballAnimation.offset,-4);
     glRotated(120,0,1,0);
     glBindTexture(GL_TEXTURE_2D, tex_ball2);
     gluQuadricTexture(qobj,true);
@@ -444,9 +463,38 @@ void myDisplay(void)
     gluDeleteQuadric(qobj);
     glPopMatrix();
 
+    glPushMatrix();
+    glTranslated(4,2 + ballAnimation.offset,-4);
+    glRotatef(-60,1,0,0);
+    glColor3f(1,0,0);
+    glutSolidCone(1,3,50,50);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(4,2 + ballAnimation.offset,-4);
+    glRotatef(-120,1,0,0);
+    glutSolidCone(1,3,50,50);
+    glPopMatrix();
+
+    glColor3f(1,1,1);
 
 //===================   Tree Start  ============================//
     glDisable(GL_TEXTURE_2D);
+
+//    animation stuff
+
+    glPushMatrix();
+    GLfloat m[16] = {
+            1.0f, 0.0f, 0.0f, 0.0f,
+            treeAnim.shear, 1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+    };
+    glMultMatrixf(m);
+
+    glRotatef(treeAnim.rotAngle, 1, 0, 0);
+
+
     //  STEM //
     glPushMatrix();
     qobj = gluNewQuadric();
@@ -484,6 +532,8 @@ void myDisplay(void)
     glPopMatrix();
     //Leaves End//
 
+    glPopMatrix(); // for animation
+
 //==================== TREE ENDS ===============================//
 
 
@@ -496,13 +546,13 @@ void myDisplay(void)
     glRotatef(sb.rotAngle,1,0,0);
     glTranslatef(0,-7,-9);
 
-    GLfloat m[16] = {
+    GLfloat m2[16] = {
             1.0f, 0.0f, 0.0f, 0.0f,
             sb.shear, 1.0f, 0.0f, 0.0f,
             0.0f, 0.0f, 1.0f, 0.0f,
             0.0f, 0.0f, 0.0f, 1.0f
     };
-    glMultMatrixf(m);
+    glMultMatrixf(m2);
 
     // FACE //
     glPushMatrix();
@@ -1008,13 +1058,13 @@ void myDisplay(void)
     gluCylinder(qobj,4,4,6,50,50);
     glPopMatrix();
 
-    glPushMatrix();
-    glRotatef(houseAnim.wheelRotate,1,0,0);
 
+//    wheel
     glColor3f(RGB2FLT(53), RGB2FLT(108), RGB2FLT(137));
     glPushMatrix();
     glTranslatef(9.6,3,55);
     glRotatef(-90,0,1,0);
+    glScalef(houseAnim.scale,houseAnim.scale,houseAnim.scale);
     glutSolidTorus(0.25,1,50,50);
     glPopMatrix();
 
@@ -1022,11 +1072,13 @@ void myDisplay(void)
     glPushMatrix();
     glTranslatef(9.6,3,55);
     glRotatef(-90,0,1,0);
+    glScalef(houseAnim.scale,houseAnim.scale,houseAnim.scale);
     gluDisk(qobj,0,1,50,50);
     glPopMatrix();
 
-    glPopMatrix();
     glColor3f(1,1,1);
+
+
 //    glPushMatrix();
 //    qobj = gluNewQuadric();
 //    glTranslatef(-1,4.5,-1.4);
@@ -1051,11 +1103,10 @@ void myDisplay(void)
     glPushMatrix();
     qobj = gluNewQuadric();
     glTranslated(50,0,0);
-    glRotated(90,1,0,1);
     glBindTexture(GL_TEXTURE_2D, underwater);
     gluQuadricTexture(qobj,true);
     gluQuadricNormals(qobj,GL_SMOOTH);
-    gluSphere(qobj,150,100,100);
+    gluSphere(qobj,100,100,100);
     gluDeleteQuadric(qobj);
 
 
@@ -1096,6 +1147,57 @@ void myKeyboard(unsigned char key, int x, int y)
             break;
         case 'e':
             camera.moveZ(-d);
+            break;
+
+//            bool ballAnimate,sbAnimate, houseAnimate, poleAnimate, patrickAnimate;
+
+        case '1':
+            if(playAll) {
+                ballAnimate = !ballAnimate;
+                if(!ballAnimate) ballAnimation = ballInitial;
+                break;
+            }
+
+        case '2':
+            if(playAll) {
+                patrickAnimate = !patrickAnimate;
+                if (!patrickAnimate) patrickAnim = patrickInitial;
+                break;
+            }
+
+        case '3':
+            if(playAll) {
+                sbAnimate = !sbAnimate;
+                if (!sbAnimate) sb = sbInitial;
+            }
+            break;
+
+        case '4':
+            if(playAll) {
+                treeAnimate = !treeAnimate;
+                if (!treeAnimate) treeAnim = treeInitial;
+                break;
+            }
+
+        case '5':
+            if(playAll) {
+                poleAnimate = !poleAnimate;
+                if (!poleAnimate) {
+                    poleRotate = 0;
+                    polClockwise = true;
+                }
+                break;
+            }
+
+        case '6':
+            if(playAll) {
+                houseAnimate = !houseAnimate;
+                if (!sbAnimate) houseAnim = houseInitial;
+                break;
+            }
+
+        case 'p':
+            playAll = !playAll;
             break;
 
         case GLUT_KEY_ESCAPE:
@@ -1204,11 +1306,8 @@ void myReshape(int w, int h)
 
 
 void animateBall() {
-    if(ballAnimation.delay >= 500)
-        ballAnimation.delay = 0;
 
-    if(ballAnimation.delay <= 300) {
-        if(ballAnimation.offset >= 6) {
+        if(ballAnimation.offset >= 9) {
             ballAnimation.up = false;
             ballAnimation.offset -= 0.4;
         } else if(ballAnimation.offset <= 0){
@@ -1217,10 +1316,6 @@ void animateBall() {
         } else {
             ballAnimation.offset = (ballAnimation.up)? ballAnimation.offset += 0.4 : ballAnimation.offset -= 0.4;
         }
-    } else if(ballAnimation.offset > 0) {
-        ballAnimation.offset-= 0.4;
-    }
-    ballAnimation.delay ++;
 }
 
 void sbAnimation1() {
@@ -1302,7 +1397,6 @@ void cartwheel() {
             patrickAnim.offset += 0.1;
         }
     }
-
 }
 
 void patrickAnimation1() {
@@ -1329,10 +1423,12 @@ void patrickAnimation1() {
 }
 
 void patrickAnimation() {
-    if(patrickAnim.delay >= 800 && patrickAnim.rotAngle <= 4 && patrickAnim.rotAngle >= -4)
+    if(patrickAnim.delay >= 1000) {
+        patrickAnim = patrickInitial;
         patrickAnim.delay = 0;
+    }
 
-    if(patrickAnim.delay <= 300 || patrickAnim.scale > 1.1  || patrickAnim.scale < 0.8 || patrickAnim.offset > 1 || patrickAnim.offset < -1) {
+    if(patrickAnim.delay <= 300) {
         patrickAnimation1();
     } else {
         cartwheel();
@@ -1363,25 +1459,59 @@ void houseAnimation() {
         (!houseAnim.grassRev)? houseAnim.grassOffset -= 0.1 : houseAnim.grassOffset += 0.1;
     }
 
-    if(houseAnim.wheelRotate >= 360) {
-        houseAnim.wheelRotate -= 2;
-    }
-
-    else {
-        houseAnim.wheelRotate += 2;
+    if(houseAnim.scale >= 1.5) {
+        houseAnim.scaleUp = false;
+        houseAnim.scale -= 0.05;
+    } else if (houseAnim.scale <= 0.8){
+        houseAnim.scaleUp= true;
+        houseAnim.scale += 0.05;
+    } else {
+        (houseAnim.scaleUp)? houseAnim.scale += 0.05 : houseAnim.scale -= 0.05  ;
     }
 }
 
+void treeAnimation() {
+    if(treeAnim.shear >= 1.2) {
+       treeAnim.shearFnt = false;
+       treeAnim.shear -= 0.1;
+    } else if (treeAnim.shear <= -1.2){
+       treeAnim.shearFnt= true;
+       treeAnim.shear += 0.1;
+    } else {
+        (treeAnim.shearFnt)?treeAnim.shear += 0.1 :treeAnim.shear -= 0.1;
+    }
+
+    if (treeAnim.rotAngle >= 15) {
+        treeAnim.clockwise = true;
+        treeAnim.rotAngle -= 1;
+    } else if (treeAnim.rotAngle <= -15) {
+        treeAnim.clockwise = false;
+        treeAnim.rotAngle += 1;
+    } else {
+        (!treeAnim.clockwise)? treeAnim.rotAngle += 1 : treeAnim.rotAngle -= 1;
+    }
+
+}
 
 
 void timef(int val) {
 
-    animateBall();
-    sbAnimation();
-    poleAnimation();
-    houseAnimation();
-//    patrickAnimation();
-    cartwheel();
+    if(playAll) {
+        if(ballAnimate)
+            animateBall();
+        if(sbAnimate)
+            sbAnimation();
+        if(poleAnimate)
+            poleAnimation();
+        if(houseAnimate)
+            houseAnimation();
+        if(treeAnimate)
+            treeAnimation();
+        if(patrickAnimate)
+            patrickAnimation();
+    }
+
+
     glutPostRedisplay();                        // redraw
     glutTimerFunc(10, timef, 0);                    //recall the time function after 1000
 }
