@@ -27,6 +27,9 @@ int globalTime = 0;
 //Textures
 GLuint tex_sky, tex_ground, tex_ball, tex_ball2, tex_ball3, water, underwater;
 
+float poleRotate = 0;
+bool polClockwise = true;
+
 
 struct BallAnimation{
     float offset = 0;
@@ -35,6 +38,41 @@ struct BallAnimation{
 };
 
 BallAnimation ballAnimation;
+
+struct SpongeBobAnimation{
+    float rotAngle =0;
+    bool clockwise = false;
+    float offset = 0;
+    bool front = true;
+    float shear = 0;
+    bool shearFnt = true;
+    int delay= 0;
+};
+
+SpongeBobAnimation sb;
+
+
+
+struct PatrickAnimation{
+    float rotAngle =0;
+    bool clockwise = true;
+    float offset = 0;
+    bool front = true;
+    int delay= 0;
+    float scale = 1;
+    float scaleUp = true;
+};
+PatrickAnimation patrickAnim;
+
+struct HouseAnimation{
+    float grassOffset = 0;
+    float grassRev = false;
+    float wheelRotate = 0;
+};
+HouseAnimation houseAnim;
+
+
+
 
 char title[] = "3D Model Loader Sample";
 
@@ -287,13 +325,13 @@ void RenderGround()
     glBegin(GL_QUADS);
     glNormal3f(0, 1, 0);	// Set quad normal direction.
     glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
-    glVertex3f(-20, 0, -20);
+    glVertex3f(-20, 0, -40);
     glTexCoord2f(1, 0);
-    glVertex3f(20, 0, -20);
+    glVertex3f(20, 0, -40);
     glTexCoord2f(1, 5);
-    glVertex3f(20, 0, 50);
+    glVertex3f(20, 0, 70);
     glTexCoord2f(0, 5);
-    glVertex3f(-20, 0, 50);
+    glVertex3f(-20, 0, 70);
     glEnd();
     glPopMatrix();
 
@@ -450,6 +488,21 @@ void myDisplay(void)
 
 
 //==================== SPONGEBOB ================================//
+
+//    animation stuff //
+    glPushMatrix();
+    glTranslatef(sb.offset,0,0);
+    glTranslatef(0,7,9);
+    glRotatef(sb.rotAngle,1,0,0);
+    glTranslatef(0,-7,-9);
+
+    GLfloat m[16] = {
+            1.0f, 0.0f, 0.0f, 0.0f,
+            sb.shear, 1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+    };
+    glMultMatrixf(m);
 
     // FACE //
     glPushMatrix();
@@ -635,7 +688,7 @@ void myDisplay(void)
     glColor3f(1,1,1);
 
 
-//    arms      //
+//    arms    //
 
     glPushMatrix();
     glColor3f(RGB2FLT(255), RGB2FLT(247), RGB2FLT(0));
@@ -653,74 +706,344 @@ void myDisplay(void)
     glPopMatrix();
     glColor3f(1,1,1);
 
+    glPopMatrix();
+    glColor3f(1,1,1);
+    glPopMatrix(); // pop for animation
+
+    gluDeleteQuadric(qobj);
+
+//================================= END OF SPONGEBOB ====================================//
+
+//================================= PATRICK =============================================//
+
+//    animation stuff
+    glPushMatrix();
+    glTranslatef(0,0,patrickAnim.offset);
+    glTranslatef(-3.5,6.5,-3);
+    glRotatef(patrickAnim.rotAngle, 1, 0,0);
+    glTranslatef(3.5,-6.5,3);
+
+    glScalef(patrickAnim.scale, patrickAnim.scale, patrickAnim.scale);
 
 
+    glPushMatrix();
+    glTranslatef(0,-1,0);
+//  head    //
+
+    glPushMatrix();
+    glColor3f(RGB2FLT(255), RGB2FLT(179), RGB2FLT(181));
+    glTranslatef(-3.5,7.5,-3);
+    glRotatef(-90,1,0,0);
+    glScalef(0.5,1,1);
+    glutSolidCone(2,5,50,50);
+    glPopMatrix();
+
+//    arms    //
+    glPushMatrix();
+    glTranslatef(-3.5,6.5,-1);
+    glScalef(0.7,0.5,1);
+    glutSolidCone(2,5,50,50);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-3.5,6.5,-5);
+    glScalef(0.7,0.5,1);
+    glRotatef(-180,1,0,0);
+    glutSolidCone(2,5,50,50);
+    glPopMatrix();
+
+//    kersh     //
+
+    glPushMatrix();
+    glTranslatef(-3.3,6.5,-3);
+    glScalef(0.7,0.8,1);
+    glutSolidSphere(2.6,50,50);
+    glPopMatrix();
 
 
+//    bantalooon //
 
+//    https://www.opengl.org/discussion_boards/showthread.php/136467-Hemispheres/page2?s=252a6e5d80c0ce83d8ea02639e39e296
+
+    static GLUquadricObj * q = 0;
+    if(!q)
+    {
+        q = gluNewQuadric();
+        gluQuadricDrawStyle(q, GLU_FILL);
+    }
+
+    double radius = 2.2;
+    double clipEq[2][4] =
+            { { radius, 0.0, 0.0, 1.0 }, { -radius, 0.0, 0.0, 1.0 } };
+
+
+    glPushMatrix();
+    glScalef(0.9,0.9,1);
+    glTranslatef(-5.7,5.5,-3);
+    glTranslatef(radius,0,0);
+    glRotatef(-90,0,0,1);
+    glTranslatef(-radius,0,0);
+    glPushMatrix();
+    glColor3f(RGB2FLT(182), RGB2FLT(198), RGB2FLT(3));
+    glTranslatef(radius, 0.0, 0.0);
+    glEnable(GL_CLIP_PLANE0);
+    glClipPlane(GL_CLIP_PLANE0, clipEq[0]);
+    gluSphere(q, radius, 50, 50);
+    glPopMatrix();
+    glPopMatrix();
+
+    glDisable(GL_CLIP_PLANE0);
+
+//    fat7et el bantaloon //
+    glPushMatrix();
+    glTranslatef(-3.3,2.9,-2.2);
+    glRotatef(-18,1,0,0);
+    glTranslatef(3.3,-2.4,3);
+
+    glPushMatrix();
+    qobj = gluNewQuadric();
+    glColor3f(RGB2FLT(182), RGB2FLT(198), RGB2FLT(3));
+    glTranslatef(-3.3,2.4,-3);
+    glRotatef(-90,1,0,0);
+    gluCylinder(qobj, 1.2, 1.2,1,50,50);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-3.3,2.5,-3);
+    glRotatef(-90,1,0,0);
+    gluDisk(qobj,0,1.2,50,50);
+    glPopMatrix();
+
+    glPushMatrix();
+    glColor3f(RGB2FLT(255), RGB2FLT(179), RGB2FLT(181));
+    glTranslatef(-3.3,2.6,-3);
+    glRotatef(90,1,0,0);
+    glutSolidCone(1.2,2.5,50,50);
+    glPopMatrix();
+
+    glPopMatrix();
+
+
+//    fat7et el bantaloon 2 //
+    glPushMatrix();
+    glTranslatef(-3.3,2.9,-4);
+    glRotatef(18,1,0,0);
+    glTranslatef(3.3,-2.4,3);
+
+    glPushMatrix();
+    qobj = gluNewQuadric();
+    glColor3f(RGB2FLT(182), RGB2FLT(198), RGB2FLT(3));
+    glTranslatef(-3.3,2.4,-3);
+    glRotatef(-90,1,0,0);
+    gluCylinder(qobj, 1.2, 1.2,1,50,50);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-3.3,2.5,-3);
+    glRotatef(-90,1,0,0);
+    gluDisk(qobj,0,1.2,50,50);
+    glPopMatrix();
+
+    glPushMatrix();
+    glColor3f(RGB2FLT(255), RGB2FLT(179), RGB2FLT(181));
+    glTranslatef(-3.3,2.6,-3);
+    glRotatef(90,1,0,0);
+    glutSolidCone(1.2,2.5,50,50);
+    glPopMatrix();
+
+    glPopMatrix();
+
+
+//    eyes  (beautiful ones ;) )   //
+
+    glColor3f(1,1,1);
+    glPushMatrix();
+    glTranslatef(-3.5,4.7,-9.5);
+    glScalef(0.7,0.7,0.7);
+    DrawEye();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-3.5,4.7,-10.5);
+    glScalef(0.7,0.7,0.7);
+    DrawEye();
+    glPopMatrix();
+
+
+//    mouth   //
+
+    glPushMatrix();
+    glColor3f(0,0,0);
+    glTranslatef(-2.7,9,-3);
+    glScalef(0.05,1,2);
+    glutSolidCube(0.8);
+    glColor3f(1,1,1);
+    glPopMatrix();
 
     glPopMatrix();
     glColor3f(1,1,1);
 
-// TODO: Delete qobj
 
-//    glDisable(GL_TEXTURE_2D);
-//    glPushMatrix();
-//    glColor3f(0.7,0.7,0.7);
-//    glTranslatef(0,3,0);
-//    glutSolidSphere(2,50,50);
-//    glColor3f(1,1,1);
-//    glPopMatrix();
-//    glEnable(GL_TEXTURE_2D);
+    glPopMatrix(); // pop for animation stuff
+    gluDeleteQuadric(qobj);
+
+//================ END OF PATRICK ==================//
 
 
-//    DrawCircleOnBall();
-//
-//    orthogonalStart();
-//    glColor3f(1,0,0);
-//    DrawHexagonOnBall();
-//    glColor3f(1,1,1);
-//    orthogonalEnd();
-//
-//    for (int i = 0; i < 360; i+=50) {
-//        glPushMatrix();
-//        glRotatef(-i,0,1,0);
-//        DrawCircleOnBall();
-//        glPopMatrix();
-//
-//        glPushMatrix();
-//        glRotatef(-i,1,1,0);
-//        DrawCircleOnBall();
-//        glPopMatrix();
-//    }
-//
-////    glPushMatrix();
-//    glRotatef(-100,0,1,0);
-//    DrawCircleOnBall();
-//    glPopMatrix();
-////
+//================= PATRICK's HOURSE ==========================//
+
+    if(!q)
+    {
+        q = gluNewQuadric();
+        gluQuadricDrawStyle(q, GLU_FILL);
+    }
+
+    double radius2 = 8;
+    double clipEq2[2][4] =
+            { { radius2, 0.0, 0.0, 1.0 }, { -radius2, 0.0, 0.0, 1.0 } };
+
+
+    glPushMatrix();
+//    glScalef(0.9,0.9,1);
+    glTranslatef(-5.7,0,34);
+    glTranslatef(radius2,0,0);
+    glRotatef(90,0,0,1);
+    glTranslatef(-radius2,0,0);
+    glPushMatrix();
+    glColor3f(RGB2FLT(103), RGB2FLT(58), RGB2FLT(54));
+    glTranslatef(radius2, 0.0, 0.0);
+    glEnable(GL_CLIP_PLANE0);
+    glClipPlane(GL_CLIP_PLANE0, clipEq2[0]);
+    gluSphere(q, radius2, 50, 50);
+    glPopMatrix();
+    glPopMatrix();
+
+
+    glDisable(GL_CLIP_PLANE0);
+
+    glPushMatrix();
+    glTranslatef(2,8,34);
+    glRotatef(poleRotate,0,1,0);
+    glTranslatef(-2,-8,-34);
+    glPushMatrix();
+    glColor3f(RGB2FLT(107), RGB2FLT(103), RGB2FLT(53));
+    glTranslatef(2,8,34);
+
+    glPushMatrix();
+    qobj = gluNewQuadric();
+    glRotatef(-90,1,0,0);
+    gluCylinder(qobj,0.5,0.5,4,50,50);
+    glPopMatrix();
+
+
+    glPushMatrix();
+    qobj = gluNewQuadric();
+    glTranslatef(0,4,-2.0);
+    gluCylinder(qobj,0.5,0.5,4,50,50);
+    gluDisk(qobj,0,0.5,50,50);
+    glTranslatef(0,0,4);
+    gluDisk(qobj,0,0.5,50,50);
+    glPopMatrix();
+
+    glPopMatrix();
+
+    glPopMatrix();
+    glColor3f(1,1,1);
+
+//================= SPONGEBOB'S HOUSE =========================//
+    glPushMatrix();
+    glTranslatef(-5.7,-7.5,55);
+    glTranslatef(radius2,0,0);
+    glRotatef(90,0,0,1);
+    glTranslatef(-radius2,0,0);
+    glScalef(2,0.8,1);
+    glPushMatrix();
+    glColor3f(RGB2FLT(190), RGB2FLT(77), RGB2FLT(2));
+    glTranslatef(radius2, 0.0, 0.0);
+    glEnable(GL_CLIP_PLANE0);
+    glClipPlane(GL_CLIP_PLANE0, clipEq2[0]);
+    gluSphere(q, radius2, 50, 50);
+    glPopMatrix();
+    glPopMatrix();
+    glDisable(GL_CLIP_PLANE0);
+    glColor3f(1,1,1);
+
+//    grass
+
+//    animation
+
+    glPushMatrix();
+    glColor3f(RGB2FLT(19), RGB2FLT(94), RGB2FLT(9));
+    glLineWidth(4);
+    for (int i = -90; i <= 90 ; i+=4) {
+        glPushMatrix();
+        if(i >= 0) {
+            glTranslatef(0,0,-houseAnim.grassOffset);
+        } else {
+            glTranslatef(0,0,houseAnim.grassOffset);
+        }
+        glTranslatef(3,15,55);
+        glRotatef(i,1,0,0);
+        glTranslatef(-3,-15,-55);
+        glBegin(GL_LINES);
+        glVertex3f(3.0f, 15, 55.0f);
+        glVertex3f(3.0f, 22, 55.0f);
+        glEnd();
+        glPopMatrix();
+    }
+    glColor3f(1,1,1);
+    glPopMatrix();
+
+    glPopMatrix();
+
+    glLineWidth(1);
+
+//    gate
+
+    qobj = gluNewQuadric();
+    glPushMatrix();
+    glColor3f(RGB2FLT(73), RGB2FLT(144), RGB2FLT(181));
+    glTranslatef(5.5,6.2,55);
+    glRotatef(90,1,0,0);
+    gluCylinder(qobj,4,4,6,50,50);
+    glPopMatrix();
+
+    glPushMatrix();
+    glRotatef(houseAnim.wheelRotate,1,0,0);
+
+    glColor3f(RGB2FLT(53), RGB2FLT(108), RGB2FLT(137));
+    glPushMatrix();
+    glTranslatef(9.6,3,55);
+    glRotatef(-90,0,1,0);
+    glutSolidTorus(0.25,1,50,50);
+    glPopMatrix();
+
+    glColor3f(RGB2FLT(27), RGB2FLT(63), RGB2FLT(81));
+    glPushMatrix();
+    glTranslatef(9.6,3,55);
+    glRotatef(-90,0,1,0);
+    gluDisk(qobj,0,1,50,50);
+    glPopMatrix();
+
+    glPopMatrix();
+    glColor3f(1,1,1);
 //    glPushMatrix();
-//    glRotatef(-200,0,1,0);
-//    DrawCircleOnBall();
+//    qobj = gluNewQuadric();
+//    glTranslatef(-1,4.5,-1.4);
+//    glRotatef(70,0,1,0);
+//    glScalef(2,1,1);
+//    gluDisk(qobj,0,0.5,50,50);
+//    gluCylinder(qobj,0.5,0.5,0.5,50,50);
 //    glPopMatrix();
 
 //    glPushMatrix();
-//    glRotatef(-150,0,1,0);
-//    DrawCircleOnBall();
+//    qobj = gluNewQuadric();
+//    glTranslatef(0,4,-2.4);
+//    glRotatef(70,0,1,0);
+//    gluCylinder(qobj,0.5,0.5,0.5,50,50);
 //    glPopMatrix();
 
-//    // Draw Tree Model
-//    glPushMatrix();
-//    glTranslatef(10, 0, 0);
-//    glScalef(0.7, 0.7, 0.7);
-//    model_tree.Draw();
-//    glPopMatrix();
-//
-//    // Draw house Model
-//    glPushMatrix();
-//    glRotatef(90.f, 1, 0, 0);
-//    model_house.Draw();
-//    glPopMatrix();
+
 
 
 //sky box
@@ -732,7 +1055,7 @@ void myDisplay(void)
     glBindTexture(GL_TEXTURE_2D, underwater);
     gluQuadricTexture(qobj,true);
     gluQuadricNormals(qobj,GL_SMOOTH);
-    gluSphere(qobj,100,100,100);
+    gluSphere(qobj,150,100,100);
     gluDeleteQuadric(qobj);
 
 
@@ -900,9 +1223,165 @@ void animateBall() {
     ballAnimation.delay ++;
 }
 
+void sbAnimation1() {
+    if(sb.offset >= 3) {
+        sb.front = false;
+        sb.offset -= 0.1;
+    } else if (sb.offset <= -2){
+        sb.front= true;
+        sb.offset += 0.1;
+    } else {
+        (sb.front)? sb.offset += 0.1 : sb.offset -= 0.1;
+    }
+
+    if (sb.rotAngle >= 20) {
+        sb.clockwise = true;
+        sb.rotAngle -= 2;
+    } else if (sb.rotAngle <= -20) {
+        sb.clockwise = false;
+        sb.rotAngle += 2;
+    } else {
+        (!sb.clockwise)? sb.rotAngle+= 2 : sb.rotAngle -= 2;
+    }
+}
+
+
+void sbAnimation2 () {
+    if(sb.shear >= 1.5) {
+        sb.shearFnt = false;
+        sb.shear -= 0.2;
+    } else if (sb.shear <= -1.5){
+        sb.shearFnt= true;
+        sb.shear += 0.2;
+    } else {
+        (sb.shearFnt)? sb.shear += 0.2 : sb.shear -= 0.2;
+    }
+
+    if (sb.rotAngle >= 15) {
+        sb.clockwise = true;
+        sb.rotAngle -= 2;
+    } else if (sb.rotAngle <= -15) {
+        sb.clockwise = false;
+        sb.rotAngle += 2;
+    } else {
+        (!sb.clockwise)? sb.rotAngle+= 2 : sb.rotAngle -= 2;
+    }
+
+}
+
+void sbAnimation() {
+    if(sb.delay >= 600 && sb.shear <= 0.2  && sb.shear >= -0.2 && sb.rotAngle <= 2 && sb.rotAngle >= -2)
+        sb.delay = 0;
+
+    if(sb.delay <= 300  || sb.offset > 3 ||  sb.offset < -3  || sb.rotAngle > 4 || sb.rotAngle < -4) {
+        sbAnimation1();
+    } else {
+        sbAnimation2();
+    }
+    sb.delay ++;
+}
+
+void cartwheel() {
+    if(patrickAnim.rotAngle <= -360) {
+        patrickAnim.clockwise = false;
+        patrickAnim.front = true;
+        patrickAnim.rotAngle += 4;
+        patrickAnim.offset += 0.1;
+    } else if (patrickAnim.rotAngle >= 360) {
+        patrickAnim.clockwise = true;
+        patrickAnim.front = false;
+        patrickAnim.rotAngle -= 2;
+        patrickAnim.offset -= 0.1;
+
+    } else {
+        if(patrickAnim.clockwise) {
+            patrickAnim.rotAngle -= 2;
+            patrickAnim.offset -= 0.1;
+        } else {
+            patrickAnim.rotAngle += 2;
+            patrickAnim.offset += 0.1;
+        }
+    }
+
+}
+
+void patrickAnimation1() {
+    if(patrickAnim.offset >= 2.5) {
+        patrickAnim.front = false;
+        patrickAnim.offset -= 0.1;
+    } else if (patrickAnim.offset <= -2.5){
+        patrickAnim.front= true;
+        patrickAnim.offset += 0.1;
+    } else {
+        (patrickAnim.front)? patrickAnim.offset += 0.1 : patrickAnim.offset -= 0.1;
+    }
+
+
+    if(patrickAnim.scale >= 1.5) {
+        patrickAnim.scaleUp = false;
+        patrickAnim.scale -= 0.05;
+    } else if (patrickAnim.scale <= 0.8){
+        patrickAnim.scaleUp= true;
+        patrickAnim.scale += 0.05;
+    } else {
+        (patrickAnim.scaleUp)? patrickAnim.scale += 0.05 : patrickAnim.scale -= 0.05  ;
+    }
+}
+
+void patrickAnimation() {
+    if(patrickAnim.delay >= 800 && patrickAnim.rotAngle <= 4 && patrickAnim.rotAngle >= -4)
+        patrickAnim.delay = 0;
+
+    if(patrickAnim.delay <= 300 || patrickAnim.scale > 1.1  || patrickAnim.scale < 0.8 || patrickAnim.offset > 1 || patrickAnim.offset < -1) {
+        patrickAnimation1();
+    } else {
+        cartwheel();
+    }
+    patrickAnim.delay ++;
+}
+
+void poleAnimation() {
+    if(poleRotate <= -360) {
+        poleRotate += 4;
+        polClockwise = false;
+    } else if (poleRotate  >= 360) {
+        poleRotate -= 4;
+        polClockwise = true;
+    } else {
+        (!polClockwise)? poleRotate += 2 : poleRotate -= 2;
+    }
+}
+
+void houseAnimation() {
+    if(houseAnim.grassOffset >= 0.4) {
+        houseAnim.grassRev = true;
+        houseAnim.grassOffset -= 0.1;
+    } else if(houseAnim.grassOffset <= 0){
+        houseAnim.grassRev = false;
+        houseAnim.grassOffset += 0.1;
+    } else {
+        (!houseAnim.grassRev)? houseAnim.grassOffset -= 0.1 : houseAnim.grassOffset += 0.1;
+    }
+
+    if(houseAnim.wheelRotate >= 360) {
+        houseAnim.wheelRotate -= 2;
+    }
+
+    else {
+        houseAnim.wheelRotate += 2;
+    }
+}
+
+
+
 void timef(int val) {
 
     animateBall();
+    sbAnimation();
+    poleAnimation();
+    houseAnimation();
+//    patrickAnimation();
+    cartwheel();
     glutPostRedisplay();                        // redraw
     glutTimerFunc(10, timef, 0);                    //recall the time function after 1000
 }
