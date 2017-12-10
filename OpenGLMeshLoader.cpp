@@ -4,8 +4,13 @@
 #include <GL/glut.h>
 #include <cstdio>
 #include <iostream>
+#include <fstream>
 #include "cmath"
-
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include "glm/glm.hpp"
 
 // =========================  NOTE ====================================//
 //          Right handed coordinate system used here                   //
@@ -18,6 +23,7 @@
 int WIDTH = 1280;
 int HEIGHT = 720;
 
+const int PATH_SIZE = 2107;
 float angle = 0.0;
 float lx = 0.0f, lz = 1.0f;
 float x = 0.0f, z = 5.0f;
@@ -32,7 +38,10 @@ bool polClockwise = true;
 
 bool ballAnimate,sbAnimate, houseAnimate, poleAnimate, patrickAnimate, treeAnimate;
 
-bool playAll = false;
+bool playAll = false, startScene = false;
+int currIteration = 0;
+bool topView = false;
+
 
 
 struct BallAnimation{
@@ -54,7 +63,6 @@ struct SpongeBobAnimation{
 
 SpongeBobAnimation sbInitial;
 SpongeBobAnimation sb;
-
 
 
 struct PatrickAnimation{
@@ -99,7 +107,7 @@ char title[] = "3D Model Loader Sample";
 GLdouble fovy = 45.0;
 GLdouble aspectRatio = (GLdouble)WIDTH / (GLdouble)HEIGHT;
 GLdouble zNear = 0.1;
-GLdouble zFar = 100;
+GLdouble zFar = 250;
 
 class Vector
 {
@@ -152,7 +160,7 @@ class Camera {
 public:
     Vector eye, center, up;
 
-    Camera(float eyeX =20, float eyeY = 5, float eyeZ = 20, float centerX = 0, float centerY = 0, float centerZ = 0, float upX = 0.0f, float upY = 1.0f, float upZ = 0.0f) {
+    Camera(float eyeX =42.865908, float eyeY = 13.923523, float eyeZ = 16.141670 , float centerX = 41.880978, float centerY = 13.750660, float centerZ = 16.136125 , float upX = 0.0f, float upY = 1.0f, float upZ = 0.0f) {
         eye = Vector(eyeX, eyeY, eyeZ);
         center = Vector(centerX, centerY, centerZ);
         up = Vector(upX, upY, upZ);
@@ -163,12 +171,15 @@ public:
         Vector temp = right * d;
         eye = eye + temp;
         center = center + temp;
+        printf("%f %f %f %f %f %f \n", eye.x, eye.y, eye.z, center.x, center.y, center.z);
+
     }
 
     void moveY(float d) {
         Vector temp = up.unit() * d;
         eye = eye + temp;
         center = center + temp;
+        printf("%f %f %f %f %f %f \n", eye.x, eye.y, eye.z, center.x, center.y, center.z);
     }
 
     void moveZ(float d) {
@@ -176,7 +187,7 @@ public:
         Vector temp = view *d;
         eye = eye + temp;
         center = center + temp;
-        printf("the eye is %f %f %f , and the center is %f %f %f \n", eye.x, eye.y, eye.z, center.x, center.y, center.z);
+        printf("%f %f %f %f %f %f \n", eye.x, eye.y, eye.z, center.x, center.y, center.z);
     }
 
     void rotateX(float a) {
@@ -187,6 +198,8 @@ public:
         view = temp+ temp2;
         up = view.cross(right);
         center = eye + view;
+        printf("%f %f %f %f %f %f \n", eye.x, eye.y, eye.z, center.x, center.y, center.z);
+
     }
 
     void rotateY(float a) {
@@ -197,6 +210,7 @@ public:
         view = temp + temp2;
         right = view.cross(up);
         center = eye + view;
+        printf("%f %f %f %f %f %f \n", eye.x, eye.y, eye.z, center.x, center.y, center.z);
     }
 
     void look() {
@@ -209,6 +223,8 @@ public:
 };
 
 Camera camera;
+Camera path[PATH_SIZE];
+
 
 int cameraZoom = 0;
 
@@ -345,9 +361,9 @@ void RenderGround()
     glNormal3f(0, 1, 0);	// Set quad normal direction.
     glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
     glVertex3f(-20, 0, -40);
-    glTexCoord2f(1, 0);
+    glTexCoord2f(5, 0);
     glVertex3f(20, 0, -40);
-    glTexCoord2f(1, 5);
+    glTexCoord2f(5, 5);
     glVertex3f(20, 0, 70);
     glTexCoord2f(0, 5);
     glVertex3f(-20, 0, 70);
@@ -454,7 +470,7 @@ void myDisplay(void)
     glPushMatrix();
     GLUquadricObj * qobj;
     qobj = gluNewQuadric();
-    glTranslated(4,2 + ballAnimation.offset,-4);
+    glTranslated(4,2 + ballAnimation.offset,-8);
     glRotated(120,0,1,0);
     glBindTexture(GL_TEXTURE_2D, tex_ball2);
     gluQuadricTexture(qobj,true);
@@ -464,14 +480,14 @@ void myDisplay(void)
     glPopMatrix();
 
     glPushMatrix();
-    glTranslated(4,2 + ballAnimation.offset,-4);
+    glTranslated(4,2 + ballAnimation.offset,-8);
     glRotatef(-60,1,0,0);
     glColor3f(1,0,0);
     glutSolidCone(1,3,50,50);
     glPopMatrix();
 
     glPushMatrix();
-    glTranslated(4,2 + ballAnimation.offset,-4);
+    glTranslated(4,2 + ballAnimation.offset,-8);
     glRotatef(-120,1,0,0);
     glutSolidCone(1,3,50,50);
     glPopMatrix();
@@ -874,7 +890,7 @@ void myDisplay(void)
     glPopMatrix();
 
 
-//    fat7et el bantaloon 2 //
+//    fat7et el bantaloon 2 //es. I would like to use this thread to gather the various is
     glPushMatrix();
     glTranslatef(-3.3,2.9,-4);
     glRotatef(18,1,0,0);
@@ -926,6 +942,22 @@ void myDisplay(void)
     glColor3f(0,0,0);
     glTranslatef(-2.7,9,-3);
     glScalef(0.05,1,2);
+    glutSolidCube(0.8);
+    glColor3f(1,1,1);
+    glPopMatrix();
+
+    glPushMatrix();
+    glColor3f(0,0,0);
+    glTranslatef(-3,10.5,-2.5 );
+    glScalef(0.05,0.35,0.8);
+    glutSolidCube(0.8);
+    glColor3f(1,1,1);
+    glPopMatrix();
+
+    glPushMatrix();
+    glColor3f(0,0,0);
+    glTranslatef(-3,10.5,-3.5 );
+    glScalef(0.05,0.35,0.8);
     glutSolidCube(0.8);
     glColor3f(1,1,1);
     glPopMatrix();
@@ -1102,16 +1134,30 @@ void myDisplay(void)
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
     qobj = gluNewQuadric();
-    glTranslated(50,0,0);
+    glTranslated(60,0,0);
     glBindTexture(GL_TEXTURE_2D, underwater);
     gluQuadricTexture(qobj,true);
     gluQuadricNormals(qobj,GL_SMOOTH);
-    gluSphere(qobj,100,100,100);
-    gluDeleteQuadric(qobj);
-
-
+    gluSphere(qobj,120,100,100);
     glPopMatrix();
 
+//    glPushMatrix();
+//    qobj = gluNewQuadric();
+////    glTranslated(-60,0,0);
+//    glBindTexture(GL_TEXTURE_2D, underwater);
+//    gluQuadricTexture(qobj,true);
+//    gluQuadricNormals(qobj,GL_SMOOTH);
+//    gluSphere(qobj,50,100,100);
+//    glPopMatrix();
+
+//    glPushMatrix();
+//    glTranslated(40,0,0);
+//    gluQuadricTexture(qobj,true);
+//    gluQuadricNormals(qobj,GL_SMOOTH);
+//    gluSphere(qobj,80,100,100);
+//    glPopMatrix();
+
+    gluDeleteQuadric(qobj);
 
     glutSwapBuffers();
 }
@@ -1198,8 +1244,43 @@ void myKeyboard(unsigned char key, int x, int y)
 
         case 'p':
             playAll = !playAll;
+            ballAnimation = ballInitial;
+            patrickAnim = patrickInitial;
+            sb = sbInitial;
+            treeAnim = treeInitial;
+            poleRotate = 0;
+            polClockwise = true;
+            houseAnim = houseInitial;
             break;
 
+        case 'v':
+            startScene = !startScene;
+            if(!startScene) {
+                camera.eye.x=42.865908, camera.eye.y = 13.923523, camera.eye.z = 16.141670;
+                camera.center.x = 41.880978, camera.center.y = 13.750660, camera.center.z = 16.136125;
+                camera.look();
+                currIteration = 0;
+            }
+            break;
+
+        case 't':
+            topView = !topView;
+            if(!topView) {
+                camera.eye.x=42.865908, camera.eye.y = 13.923523, camera.eye.z = 16.141670;
+                camera.center.x = 41.880978, camera.center.y = 13.750660, camera.center.z = 16.136125;
+                camera.look();
+            } else {
+                currIteration = 0;
+                startScene = false;
+                camera.eye.x = 20.021183;
+                camera.eye.y = 65.848793;
+                camera.eye.z = 26.813238;
+                camera.center.x = 19.535455;
+                camera.center.y = 64.974687;
+                camera.center.z = 26.810503;
+                camera.look();
+            }
+            break;
         case GLUT_KEY_ESCAPE:
             exit(EXIT_SUCCESS);
         default:
@@ -1410,7 +1491,6 @@ void patrickAnimation1() {
         (patrickAnim.front)? patrickAnim.offset += 0.1 : patrickAnim.offset -= 0.1;
     }
 
-
     if(patrickAnim.scale >= 1.5) {
         patrickAnim.scaleUp = false;
         patrickAnim.scale -= 0.05;
@@ -1493,7 +1573,6 @@ void treeAnimation() {
 
 }
 
-
 void timef(int val) {
 
     if(playAll) {
@@ -1514,6 +1593,19 @@ void timef(int val) {
 
     glutPostRedisplay();                        // redraw
     glutTimerFunc(10, timef, 0);                    //recall the time function after 1000
+}
+
+void timef2(int val) {
+    if(startScene) {
+        camera = path[currIteration];
+        camera.look();
+        currIteration++;
+        if(currIteration > PATH_SIZE)
+            currIteration = 0;
+    }
+    glutPostRedisplay();                        // redraw
+    glutTimerFunc(40, timef2, 0);                    //recall the time function after 1000
+
 }
 
 //=======================================================================
@@ -1589,6 +1681,69 @@ void LoadAssets()
     printf(SOIL_last_result());
 }
 
+using namespace std;
+
+vector<string> split(string str) {
+    vector<string> internal;
+
+    std::istringstream iss(str);
+    for(std::string str; iss >> str; )
+        internal.push_back(str);
+
+    return internal;
+
+}
+
+void load_obj(const char* filename, vector<glm::vec4> &vertices, vector<glm::vec3> &normals, vector<GLushort> &elements)
+{
+    ifstream in(filename, ios::in);
+    if (!in)
+    {
+        cerr << "Cannot open " << filename << endl; exit(1);
+    }
+
+    string line;
+    while (getline(in, line))
+    {
+        if (line.substr(0,2) == "v ")
+        {
+            istringstream s(line.substr(2));
+            glm::vec4 v; s >> v.x; s >> v.y; s >> v.z; v.w = 1.0f;
+            vertices.push_back(v);
+        }
+        else if (line.substr(0,2) == "f ")
+        {
+            istringstream s(line.substr(2));
+            GLushort a,b,c;
+            s >> a; s >> b; s >> c;
+            a--; b--; c--;
+            elements.push_back(a); elements.push_back(b); elements.push_back(c);
+        }
+        else if (line[0] == '#')
+        {
+            /* ignoring this line */
+        }
+        else
+        {
+            /* ignoring this line */
+        }
+    }
+
+    normals.resize(vertices.size(), glm::vec3(0.0, 0.0, 0.0));
+    for (int i = 0; i < elements.size(); i+=3)
+    {
+        GLushort ia = elements[i];
+        GLushort ib = elements[i+1];
+        GLushort ic = elements[i+2];
+        glm::vec3 normal = glm::normalize(glm::cross(
+                glm::vec3(vertices[ib]) - glm::vec3(vertices[ia]),
+                glm::vec3(vertices[ic]) - glm::vec3(vertices[ia])));
+        normals[ia] = normals[ib] = normals[ic] = normal;
+    }
+}
+
+
+
 //=======================================================================
 // Main Function
 //=======================================================================
@@ -1616,7 +1771,38 @@ int main(int argc, char** argv)
 
     glutTimerFunc(0,timef,0);
 
+    glutTimerFunc(0,timef2,0);
+
     glutReshapeFunc(myReshape);
+
+    string line;
+    ifstream myfile;
+    myfile.open("/home/moar/CLionProjects/3dbigproject/path.txt");
+
+    if(!myfile.is_open()) {
+        perror("Error open");
+        exit(EXIT_FAILURE);
+    }
+    int i = 0;
+    while(getline(myfile, line)) {
+        vector<string> input = split(line);
+
+        Camera temp;
+        temp.eye.x = stof(input[0]);
+        temp.eye.y = stof(input[1]);
+        temp.eye.z = stof(input[2]);
+
+        temp.center.x = stof(input[3]);
+        temp.center.y = stof(input[4]);
+        temp.center.z = stof(input[5]);
+
+        temp.up.x = 0;
+        temp.up.y = 1;
+        temp.up.z = 0;
+
+        path[i] = temp;
+        i++;
+    }
 
     Setup();
 

@@ -1,0 +1,1 @@
+path.txt is needed to collect a smooth path into an array for rotation of the camera about the scene in the side view.
