@@ -1,16 +1,14 @@
-//#include "lib3ds"
-//#include "GLTexture.h"
 #include "SOIL/SOIL.h"
 #include <GL/glut.h>
 #include <cstdio>
 #include <iostream>
 #include <fstream>
 #include "cmath"
-#include <iostream>
 #include <vector>
-#include <string>
 #include <sstream>
-#include "glm/glm.hpp"
+#include <assimp/cimport.h>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 // =========================  NOTE ====================================//
 //          Right handed coordinate system used here                   //
@@ -27,6 +25,12 @@ const int PATH_SIZE = 2107;
 float angle = 0.0;
 float lx = 0.0f, lz = 1.0f;
 float x = 0.0f, z = 5.0f;
+
+float *vertexArray;
+float *normalArray;
+float *uvArray;
+
+int numVerts;
 
 int globalTime = 0;
 
@@ -461,6 +465,8 @@ void myDisplay(void)
     GLfloat lightPosition[] = {0.0f, 100.0f, 0.0f, 0.0f };
     glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);
+
+
 
     // Draw Ground
     RenderGround();
@@ -1129,7 +1135,6 @@ void myDisplay(void)
 
 
 
-
 //sky box
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
@@ -1158,6 +1163,21 @@ void myDisplay(void)
 //    glPopMatrix();
 
     gluDeleteQuadric(qobj);
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    glVertexPointer(3,GL_FLOAT,0,vertexArray);
+    glNormalPointer(GL_FLOAT,0,normalArray);
+
+    glClientActiveTexture(GL_TEXTURE0_ARB);
+    glTexCoordPointer(2,GL_FLOAT,0,uvArray);
+
+    glDrawArrays(GL_TRIANGLES,0,numVerts);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
     glutSwapBuffers();
 }
@@ -1693,56 +1713,6 @@ vector<string> split(string str) {
     return internal;
 
 }
-
-void load_obj(const char* filename, vector<glm::vec4> &vertices, vector<glm::vec3> &normals, vector<GLushort> &elements)
-{
-    ifstream in(filename, ios::in);
-    if (!in)
-    {
-        cerr << "Cannot open " << filename << endl; exit(1);
-    }
-
-    string line;
-    while (getline(in, line))
-    {
-        if (line.substr(0,2) == "v ")
-        {
-            istringstream s(line.substr(2));
-            glm::vec4 v; s >> v.x; s >> v.y; s >> v.z; v.w = 1.0f;
-            vertices.push_back(v);
-        }
-        else if (line.substr(0,2) == "f ")
-        {
-            istringstream s(line.substr(2));
-            GLushort a,b,c;
-            s >> a; s >> b; s >> c;
-            a--; b--; c--;
-            elements.push_back(a); elements.push_back(b); elements.push_back(c);
-        }
-        else if (line[0] == '#')
-        {
-            /* ignoring this line */
-        }
-        else
-        {
-            /* ignoring this line */
-        }
-    }
-
-    normals.resize(vertices.size(), glm::vec3(0.0, 0.0, 0.0));
-    for (int i = 0; i < elements.size(); i+=3)
-    {
-        GLushort ia = elements[i];
-        GLushort ib = elements[i+1];
-        GLushort ic = elements[i+2];
-        glm::vec3 normal = glm::normalize(glm::cross(
-                glm::vec3(vertices[ib]) - glm::vec3(vertices[ia]),
-                glm::vec3(vertices[ic]) - glm::vec3(vertices[ia])));
-        normals[ia] = normals[ib] = normals[ic] = normal;
-    }
-}
-
-
 
 //=======================================================================
 // Main Function
